@@ -1,0 +1,38 @@
+{
+  "name": "novaserve",
+  "version": "1.0.0",
+  "description": "A minimal class-based web framework for Node.js - inspired by Express, powerd by native Web APIs.",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "/dist"
+  ],
+  "scripts": {
+    "prepare": "tsc",
+    "format": "prettier --write .",
+    "build": "tsc",
+    "test": "jest --passWithNoTests",
+    "lint": "eslint . --ext .ts"
+  },
+  "keywords": [
+    "web framework",
+    "nodejs",
+    "typescript",
+    "express",
+    "OOP",
+    "web api"
+  ],
+  "author": "Mark Mbithi",
+  "license": "ISC",
+  "packageManager": "pnpm@10.14.0",
+  "devDependencies": {
+    "@types/jest": "^30.0.0",
+    "@types/node": "^24.7.0",
+    "eslint": "^9.37.0",
+    "jest": "^30.2.0",
+    "prettier": "^3.6.2",
+    "ts-jest": "^29.4.4",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
+  }
+}
