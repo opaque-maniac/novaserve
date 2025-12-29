@@ -1,10 +1,10 @@
 /**
  * NovaRequest - Request class to construct form nodejs IncomingMessage
- * 
+ *
  * @param msg - IncommingMessage (req) from nodejs
  * @method readBody - reads stream of req.body from IncomingMessage
  *    @returns a buffer containing data if any and empty if not
- * 
+ *
  * @method json - read req.body if it json and throws an error if unable to parse json
  *    @returns parsed json typed generically as T
  */
@@ -20,6 +20,7 @@ export default class NovaRequest {
   public headers: Headers;
   public searchParams: URLSearchParams;
   public method: string = "GET";
+  public params: Record<string, string> = {};
 
   constructor(msg: IncomingMessage) {
     if (!(msg instanceof IncomingMessage)) {

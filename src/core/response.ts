@@ -1,38 +1,38 @@
 /**
  * NovaResponse - Response class to get data for how to respond to a request
- * 
+ *
  * @method status
  *    @param code - status code to send back, default 200 OK
  *    @returns void
- * 
+ *
  * @method json
  *    @param data - data to stringify if valid json
  *    @returns void
- * 
+ *
  * @method text
  *    @param data - string data to send as response
  *    @returns void
- * 
+ *
  * @method stream
  *    @param data - Readable stream data to send as response
  *    @param contentType - content type of the stream, default application/octet-stream
  *    @returns void
- * 
+ *
  * @method buffer
  *    @param data - Readable stream data to send as response
  *    @param contentType - content type of the stream, default application/octet-stream
  *    @returns void
- * 
+ *
  * @method redirect
  *    @param pathname - path to redirect to
  *    @param status - status code to send back, default 302 Found
  *    @returns void
- * 
+ *
  * @method setHeader
  *    @param key - header key to set
  *    @param value - header value to set
  *    @returns void
- * 
+ *
  * @method send
  *    @param res - ServerResponse object to send data to
  *    @returns void

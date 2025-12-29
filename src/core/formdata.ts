@@ -5,14 +5,14 @@
  * @method get
  *    @param field - name of formData field
  *    @returns - field value if any, undefined if none
- * 
+ *
  * @method getFiles
  *    @param field - name of formData input field with file
  *    @returns - Array of files (utils/types.ts), and empty one if none are available
- * 
+ *
  * @method parse - parses formData, different types based on request header
  *    @returns void
- * 
+ *
  * @method #parseMultipart - parses multipart and updated the parsedFields and parsedFiles record
  *    @return void
  */
