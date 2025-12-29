@@ -4,6 +4,7 @@
  * All types here can be exported
  */
 
+// Files uploaded from req (IncommingMessage -> node:http)
 export interface File {
   filename: string;
   mime: string;
