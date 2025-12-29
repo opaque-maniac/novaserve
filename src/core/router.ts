@@ -1,3 +1,19 @@
+/**
+ * @class NovaRouter - router to use to group routes
+ * 
+ * @method useMiddleware - used to register middleware
+ *      @param path - path to use middleware for
+ *      @param middlware - middleware to use
+ *      @returns void
+ * 
+ * @method register - used to register controllers
+ *      @param method - req method
+ *      @param path - pathname to visit
+ *      @param handler - controller for running logic code
+ *      @params middlware - array of middleware to execute
+ *      @returns void
+ */
+
 import type { AllowedMethods, Controller, RouteLayer } from "../utils/types";
 import type NovaMiddleware from "./middleware";
 import type BaseController from "./controllers/base-controller";

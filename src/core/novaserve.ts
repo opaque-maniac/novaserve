@@ -1,3 +1,15 @@
+/**
+ * @class NovaServe - main class for library
+ * 
+ * @method use - registers a router as main router
+ *    @param router - router (NovaRouter) to use
+ *    @returns void
+ * 
+ * @method listen - server listen for requests
+ *    @param port - port to listen on
+ *    @returns void
+ */
+
 import { createServer, Server } from "node:http";
 import NovaRouter from "./router";
 import NovaRequest from "./request";
@@ -18,6 +30,7 @@ export default class NovaServe {
       const _res = new NovaResponse();
       await this.router.handle(_req, _res);
 
+      // TODO: Handle this better tomorrow
       if (!!_res.headers["Location"]) {
         while (true) {
           const redirect = _res.headers["Location"];

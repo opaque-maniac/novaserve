@@ -1,5 +1,5 @@
 /**
- * NovaRequest - Request class to construct form nodejs IncomingMessage
+ * @class NovaRequest - Request class to construct form nodejs IncomingMessage
  *
  * @param msg - IncommingMessage (req) from nodejs
  * @method readBody - reads stream of req.body from IncomingMessage
