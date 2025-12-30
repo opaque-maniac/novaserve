@@ -8,7 +8,7 @@
  *
  * @method register - used to register controllers
  *      @param method - req method
- *      @param path - pathname to visit
+ *      @param path - _pathname to visit
  *      @param handler - controller for running logic code
  *      @params middlware - array of middleware to execute
  *      @returns void
@@ -57,7 +57,7 @@ export default class NovaRouter {
   }
 
   async handle(req: NovaRequest, res: NovaResponse): Promise<void> {
-    const originalPath = req.pathname;
+    const originalPath = req._pathname;
 
     for (const layer of this.layers) {
       const match = layer.regExp.exec(originalPath);
@@ -82,9 +82,9 @@ export default class NovaRouter {
 
       if (layer.handler instanceof NovaRouter) {
         const matchedPath = match[0];
-        req.pathname = originalPath.replace(matchedPath, "") || "/";
+        req._pathname = originalPath.replace(matchedPath, "") || "/";
         await layer.handler.handle(req, res);
-        req.pathname = originalPath;
+        req._pathname = originalPath;
 
         // If the sub-router handled the request, we stop
         if (res.responseData !== null) return;

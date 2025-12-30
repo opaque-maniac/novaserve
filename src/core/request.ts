@@ -19,6 +19,10 @@ export default class NovaRequest {
   public body: Buffer | null = null;
   public headers: Headers;
   public url: URL;
+  // For router logic
+  public _pathname: string;
+
+  // Normally used by consumer
   public pathname: string;
   public searchParams: URLSearchParams;
   public method: string = "GET";
@@ -41,6 +45,7 @@ export default class NovaRequest {
     this.raw = msg;
     this.method = msg.method?.toUpperCase() || "GET";
     this.url = new URL(msg.url || "/", "http://localhost");
+    this._pathname = this.url.pathname;
     this.pathname = this.url.pathname;
     this.searchParams = this.url.searchParams;
     this.headers = new Headers();

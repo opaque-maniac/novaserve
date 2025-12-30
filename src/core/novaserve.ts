@@ -31,27 +31,44 @@ export default class NovaServe {
     this.configs = configs;
 
     this.app = createServer(async (req, res) => {
-      if (!this.router) {
-        throw new Error("Cannot process request when router is not mounted");
-      }
+      try {
+        if (!this.router) {
+          res.writeHead(500, { "Content-Type": "text/plain" });
+          res.end("Router not mounted");
+          return;
+        }
 
-      const _req = new NovaRequest(req, configs.maxBodySize);
-      const _res = new NovaResponse();
-      await this.router.handle(_req, _res);
+        const _req = new NovaRequest(req, configs.maxBodySize);
+        const _res = new NovaResponse();
+        await this.router.handle(_req, _res);
 
-      // TODO: Handle this better tomorrow
-      if (!!_res.headers["Location"]) {
-        while (true) {
-          const redirect = _res.headers["Location"];
-          if (typeof redirect === "string" && redirect) {
-            _req.pathname = redirect;
-          } else {
-            break;
-          }
+        // Logging Request
+        if (this.configs.logActivity) {
+          console.log(`[Nova] ${_req.method} ${_req.pathname}`);
+        }
+
+        if (_res.responseData === null && !_res.headers["Location"]) {
+          _res.status(404).text("Not found");
+        }
+
+        // Loggin Response
+        if (this.configs.logActivity) {
+          const redirectPath = _res.headers["Location"];
+          console.log(
+            `[Nova] ${_res.status} ${
+              redirectPath ? `Redirect ${redirectPath}` : ""
+            }`,
+          );
+        }
+
+        _res.send(res);
+      } catch (err) {
+        console.log("[Nova Runtime Error]:", err);
+        if (!res.writableEnded) {
+          res.writeHead(500, { "Content-Type": "text/plain" });
+          res.end("Internal Server Error");
         }
       }
-
-      _res.send(res);
     });
   }
 
@@ -59,17 +76,26 @@ export default class NovaServe {
     this.router = router;
   }
 
-  listen(port: number) {
+  listen(port: number, callback?: () => void) {
     if (typeof port !== "number") {
-      throw new Error("PORT number should be a string");
+      throw new Error("PORT should be a number");
+    }
+
+    if (callback && typeof callback !== "function") {
+      throw new Error("Callback should be a function");
     }
 
     if (this.router === null) {
-      throw new Error("Router is required to run app");
+      throw new Error("Router should be mounted in order to run app");
     }
 
     this.port = port;
-    console.log(`Server is running on: http://localhost:${this.port}`);
-    this.app.listen(port);
+    this.app.listen(this.port, () => {
+      if (callback) {
+        callback();
+      } else {
+        console.log(`Server is running on: http://localhost:${this.port}`);
+      }
+    });
   }
 }

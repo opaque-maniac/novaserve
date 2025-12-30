@@ -1,8 +1,8 @@
 /**
  * @class StaticController - class to serve static files
- * 
+ *
  * @constant MEMORY_THRESHOLD - threshold to decide between streaming and buffering
- * 
+ *
  * @method handle - handle request
  *      @param req - request (NovaRequest)
  *      @param res - response (NovaResponse)
@@ -37,15 +37,10 @@ export default class StaticController extends BaseController {
 
       if (stats.size > MEMORY_THRESHOLD) {
         const stream = createReadStream(this.filePath);
-        res
-          .status(200)
-          .setHeader("Content-Type", contentType)
-          .stream(stream);
+        res.status(200).setHeader("Content-Type", contentType).stream(stream);
       } else {
-        const data = await readFile(this.filePath)
-        res
-          .status(200)
-          .buffer(data, contentType);
+        const data = await readFile(this.filePath);
+        res.status(200).buffer(data, contentType);
       }
     } catch (e) {
       res
