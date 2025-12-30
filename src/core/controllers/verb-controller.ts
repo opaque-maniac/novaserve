@@ -1,3 +1,21 @@
+/**
+ * @class VerbController - class to handle different HTTP verbs
+ * 
+ * Extends BaseController and implements IVerbController
+ * 
+ * @method handle - handle request based on HTTP verb
+ *    @param req - request (NovaRequest)
+ *    @param res - response (NovaResponse)
+ *    @returns void
+ * 
+ * @method GET - handle GET requests
+ * @method POST - handle POST requests
+ * @method PUT - handle PUT requests
+ * @method PATCH - handle PATCH requests
+ * @method DELETE - handle DELETE requests
+ * @returns void
+ */
+
 import { IVerbController, VerbHandler } from "../../utils/types";
 import NovaRequest from "../request";
 import NovaResponse from "../response";
@@ -7,14 +25,15 @@ export default abstract class VerbController
   extends BaseController
   implements IVerbController
 {
-  // Methods that are allowed
-  // For auto complete in subclasses
-  // TODO: Fix inheritance issue tomorrow
-  abstract GET?(req: NovaRequest, res: NovaResponse): Promise<void>;
-  abstract POST?(req: NovaRequest, res: NovaResponse): Promise<void>;
-  abstract PUT?(req: NovaRequest, res: NovaResponse): Promise<void>;
-  abstract PATCH?(req: NovaRequest, res: NovaResponse): Promise<void>;
-  abstract DELETE?(req: NovaRequest, res: NovaResponse): Promise<void>;
+  GET?(req: NovaRequest, res: NovaResponse): Promise<void>;
+  POST?(req: NovaRequest, res: NovaResponse): Promise<void>;
+  PUT?(req: NovaRequest, res: NovaResponse): Promise<void>;
+  PATCH?(req: NovaRequest, res: NovaResponse): Promise<void>;
+  DELETE?(req: NovaRequest, res: NovaResponse): Promise<void>;
+
+  constructor() {
+    super();
+  }
 
   async handle(req: NovaRequest, res: NovaResponse): Promise<void> {
     const handler = (this as any)[req.method] as VerbHandler | undefined;
