@@ -26,10 +26,6 @@ export interface Controller {
   handle(req: NovaRequest, res: NovaResponse): Promise<void> | void;
 }
 
-export interface Middleware {
-  handle(req: NovaRequest, res: NovaResponse): Promise<void> | void;
-}
-
 // For routes in router
 export interface RouteLayer {
   method: AllowedMethods | "ALL";

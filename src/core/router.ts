@@ -1,11 +1,11 @@
 /**
  * @class NovaRouter - router to use to group routes
- * 
+ *
  * @method useMiddleware - used to register middleware
  *      @param path - path to use middleware for
  *      @param middlware - middleware to use
  *      @returns void
- * 
+ *
  * @method register - used to register controllers
  *      @param method - req method
  *      @param path - pathname to visit

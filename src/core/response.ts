@@ -3,39 +3,39 @@
  *
  * @method status - register status code for response
  *    @param code - status code to send back, default 200 OK
- *    @returns void
+ *    @returns response instance
  *
  * @method json - send json response
  *    @param data - data to stringify if valid json
- *    @returns void
+ *    @returns response instance
  *
  * @method text - send text response
  *    @param data - string data to send as response
- *    @returns void
+ *    @returns response instance
  *
  * @method stream - send stream response
  *    @param data - Readable stream data to send as response
  *    @param contentType - content type of the stream, default application/octet-stream
- *    @returns void
+ *    @returns response instance
  *
  * @method buffer - send buffer response
  *    @param data - Readable stream data to send as response
  *    @param contentType - content type of the stream, default application/octet-stream
- *    @returns void
+ *    @returns response instance
  *
  * @method redirect - send redirect response
  *    @param pathname - path to redirect to
  *    @param status - status code to send back, default 302 Found
- *    @returns void
+ *    @returns response instance
  *
  * @method setHeader - to send headers for response
  *    @param key - header key to set
  *    @param value - header value to set
- *    @returns void
+ *    @returns response instance
  *
  * @method send - to move data from my class to SuccessMessage
  *    @param res - ServerResponse object to send data to
- *    @returns void
+ *    @returns response instance
  */
 import { ServerResponse } from "node:http";
 import { Readable } from "node:stream";
@@ -83,6 +83,7 @@ export default class NovaResponse {
 
   setHeader(key: string, value: string | string[]) {
     this.headers[key] = value;
+    return this;
   }
 
   send(res: ServerResponse) {

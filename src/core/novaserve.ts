@@ -1,10 +1,10 @@
 /**
  * @class NovaServe - main class for library
- * 
+ *
  * @method use - registers a router as main router
  *    @param router - router (NovaRouter) to use
  *    @returns void
- * 
+ *
  * @method listen - server listen for requests
  *    @param port - port to listen on
  *    @returns void
