@@ -68,7 +68,7 @@ export default class NovaResponse {
     return this;
   }
 
-  buffer(data: Readable, contentType: string = "application/octet-stream") {
+  buffer(data: Buffer, contentType: string = "application/octet-stream") {
     this.headers["Content-Type"] = contentType;
     this.responseData = data;
     return this;

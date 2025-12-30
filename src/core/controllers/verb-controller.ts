@@ -1,25 +1,25 @@
 /**
  * @class VerbController - class to handle different HTTP verbs
- * 
+ *
  * Extends BaseController and implements IVerbController
- * 
+ *
  * @method handle - handle request based on HTTP verb
  *    @param req - request (NovaRequest)
  *    @param res - response (NovaResponse)
  *    @returns void
- * 
+ *
  * @method GET - handle GET requests
  * @method POST - handle POST requests
  * @method PUT - handle PUT requests
  * @method PATCH - handle PATCH requests
  * @method DELETE - handle DELETE requests
- * @returns void
+ * @returns promise resolves to void
  */
 
 import { IVerbController, VerbHandler } from "../../utils/types";
-import NovaRequest from "../request";
-import NovaResponse from "../response";
 import BaseController from "./base-controller";
+import type NovaRequest from "../request";
+import type NovaResponse from "../response";
 
 export default abstract class VerbController
   extends BaseController
