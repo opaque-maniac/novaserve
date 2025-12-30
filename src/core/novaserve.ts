@@ -10,23 +10,32 @@
  *    @returns void
  */
 
+import type { NovaConfigs } from "../utils/types";
 import { createServer, Server } from "node:http";
 import NovaRouter from "./router";
 import NovaRequest from "./request";
 import NovaResponse from "./response";
 
+const defaultConfigs: NovaConfigs = {
+  logActivity: true,
+  maxBodySize: 10 * 1024 * 1024,
+};
+
 export default class NovaServe {
   private app: Server;
   private port: number = 3000;
   private router: NovaRouter | null = null;
+  private configs: NovaConfigs;
 
-  constructor() {
+  constructor(configs: NovaConfigs = defaultConfigs) {
+    this.configs = configs;
+
     this.app = createServer(async (req, res) => {
       if (!this.router) {
         throw new Error("Cannot process request when router is not mounted");
       }
 
-      const _req = new NovaRequest(req);
+      const _req = new NovaRequest(req, configs.maxBodySize);
       const _res = new NovaResponse();
       await this.router.handle(_req, _res);
 

@@ -10,6 +10,12 @@ import NovaResponse from "../core/response";
  * All types here can be exported
  */
 
+// Configs for the app
+export type NovaConfigs = {
+  logActivity: boolean;
+  maxBodySize: number;
+};
+
 // Files uploaded from req (IncommingMessage -> node:http)
 export interface File {
   filename: string;
@@ -33,4 +39,19 @@ export interface RouteLayer {
   keys: Key[];
   middleware: NovaMiddleware[];
   handler: BaseController | Controller;
+}
+
+// Verb handler
+export type VerbHandler = (
+  req: NovaRequest,
+  res: NovaResponse,
+) => Promise<void>;
+
+// Verb controller
+export interface IVerbController {
+  GET?: VerbHandler;
+  POST?: VerbHandler;
+  PUT?: VerbHandler;
+  PATCH?: VerbHandler;
+  DELETE?: VerbHandler;
 }

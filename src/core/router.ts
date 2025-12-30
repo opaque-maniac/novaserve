@@ -80,11 +80,18 @@ export default class NovaRouter {
         if (res.responseData !== null) return;
       }
 
-      await layer.handler.handle(req, res);
+      if (layer.handler instanceof NovaRouter) {
+        const matchedPath = match[0];
+        req.pathname = originalPath.replace(matchedPath, "") || "/";
+        await layer.handler.handle(req, res);
+        req.pathname = originalPath;
 
-      // Request finished
-      if (!(layer.handler instanceof NovaRouter)) return;
-      if (res.responseData !== null) return;
+        // If the sub-router handled the request, we stop
+        if (res.responseData !== null) return;
+      } else {
+        await layer.handler.handle(req, res);
+        return;
+      }
     }
 
     if (res.responseData == null) {

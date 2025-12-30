@@ -10,8 +10,8 @@
 import type NovaRequest from "../request";
 import type NovaResponse from "../response";
 
-export default class BaseController {
-  async handle(req: NovaRequest, res: NovaResponse) {
+export default abstract class BaseController {
+  async handle(req: NovaRequest, res: NovaResponse): Promise<void> {
     res
       .status(501)
       .setHeader("Content-Type", "text/plain; charset=utf-8")

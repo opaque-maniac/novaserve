@@ -1,7 +1,10 @@
 /**
  * @class NovaRequest - Request class to construct form nodejs IncomingMessage
  *
- * @param msg - IncommingMessage (req) from nodejs
+ * @constructor
+ *    @param msg - IncommingMessage (req) from nodejs
+ *    @param maxBodySize - maximum size a req.body should be
+ *
  * @method readBody - reads stream of req.body from IncomingMessage
  *    @returns a buffer containing data if any and empty if not
  *
@@ -11,29 +14,35 @@
 
 import { IncomingMessage } from "node:http";
 
-const MAX_BODY_SIZE = 10 * 1024 * 1024;
-
 export default class NovaRequest {
   public raw: IncomingMessage;
-  public pathname: string;
   public body: Buffer | null = null;
   public headers: Headers;
+  public url: URL;
+  public pathname: string;
   public searchParams: URLSearchParams;
   public method: string = "GET";
   public params: Record<string, string> = {};
+  private MAX_BODY_SIZE: number;
 
-  constructor(msg: IncomingMessage) {
+  constructor(msg: IncomingMessage, maxBodySize: number) {
     if (!(msg instanceof IncomingMessage)) {
       throw new Error(
         "Request requires an instance of IncomingMessage in constructor",
       );
     }
 
+    if (typeof maxBodySize !== "number") {
+      throw new Error(
+        "Request requeres MAX_BODY_SIZE value of type 'number' to select threshold",
+      );
+    }
+
     this.raw = msg;
     this.method = msg.method?.toUpperCase() || "GET";
-    const url = new URL(msg.url || "/", "http://localhost");
-    this.pathname = url.pathname;
-    this.searchParams = url.searchParams;
+    this.url = new URL(msg.url || "/", "http://localhost");
+    this.pathname = this.url.pathname;
+    this.searchParams = this.url.searchParams;
     this.headers = new Headers();
 
     for (const [k, v] of Object.entries(msg.headers)) {
@@ -45,6 +54,8 @@ export default class NovaRequest {
         this.headers.append(k, v);
       }
     }
+
+    this.MAX_BODY_SIZE = maxBodySize;
   }
 
   async readBody(): Promise<Buffer> {
@@ -57,7 +68,7 @@ export default class NovaRequest {
       this.raw.on("data", (chunk: Buffer) => {
         size += chunk.length;
 
-        if (size > MAX_BODY_SIZE) {
+        if (size > this.MAX_BODY_SIZE) {
           reject(new Error("401: Body exceeds limit of 10MB"));
           this.raw.destroy();
           return;
