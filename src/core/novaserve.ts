@@ -12,23 +12,23 @@
 
 import type { NovaConfigs } from "../utils/types";
 import { createServer, Server } from "node:http";
+import { extname } from "node:path";
 import NovaRouter from "./router";
 import NovaRequest from "./request";
 import NovaResponse from "./response";
-
-const defaultConfigs: NovaConfigs = {
-  logActivity: true,
-  maxBodySize: 10 * 1024 * 1024,
-};
+import { defaultConfigs } from "../utils/constants";
+import StaticManager from "./static-manager";
 
 export default class NovaServe {
   private app: Server;
   private port: number = 3000;
   private router: NovaRouter | null = null;
   private configs: NovaConfigs;
+  private staticManager: StaticManager;
 
-  constructor(configs: NovaConfigs = defaultConfigs) {
-    this.configs = configs;
+  constructor(configs: Partial<NovaConfigs> = defaultConfigs) {
+    this.configs = { ...defaultConfigs, ...configs };
+    this.staticManager = new StaticManager();
 
     this.app = createServer(async (req, res) => {
       try {
@@ -38,13 +38,35 @@ export default class NovaServe {
           return;
         }
 
-        const _req = new NovaRequest(req, configs.maxBodySize);
+        const _req = new NovaRequest(req, this.configs.maxBodySize);
         const _res = new NovaResponse();
-        await this.router.handle(_req, _res);
 
         // Logging Request
         if (this.configs.logActivity) {
           console.log(`[Nova] ${_req.method} ${_req.pathname}`);
+        }
+
+        const hasExtension = !!extname(_req.pathname);
+        let handledByStatic: boolean = false;
+
+        if (hasExtension) {
+          handledByStatic = await this.staticManager.handle(_req, _res);
+        }
+
+        if (!handledByStatic) {
+          if (!this.router) {
+            if (this.configs.logActivity) {
+              console.log(`[Nova] ${_res.status}`);
+            }
+
+            res.writeHead(500, "", {
+              "content-type": "text/plain; charset=utf-8",
+            });
+            res.end("Router not mounted");
+            return;
+          }
+
+          await this.router.handle(_req, _res);
         }
 
         if (_res.responseData === null && !_res.headers["Location"]) {

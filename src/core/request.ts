@@ -13,6 +13,7 @@
  */
 
 import { IncomingMessage } from "node:http";
+import { defaultConfigs } from "../utils/constants";
 
 export default class NovaRequest {
   public raw: IncomingMessage;
@@ -29,7 +30,10 @@ export default class NovaRequest {
   public params: Record<string, string> = {};
   private MAX_BODY_SIZE: number;
 
-  constructor(msg: IncomingMessage, maxBodySize: number) {
+  constructor(
+    msg: IncomingMessage,
+    maxBodySize: number = defaultConfigs.maxBodySize,
+  ) {
     if (!(msg instanceof IncomingMessage)) {
       throw new Error(
         "Request requires an instance of IncomingMessage in constructor",
