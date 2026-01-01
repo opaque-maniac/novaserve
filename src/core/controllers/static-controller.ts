@@ -9,7 +9,6 @@
  *      @returns void
  */
 
-import path from "node:path";
 import BaseController from "./base-controller";
 import NovaRequest from "../request";
 import type NovaResponse from "../response";

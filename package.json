@@ -8,7 +8,7 @@
     "/dist"
   ],
   "scripts": {
-    "prepare": "tsc",
+    "prepare": "npm run build",
     "format": "prettier --write .",
     "build": "tsc",
     "test": "jest --passWithNoTests",
